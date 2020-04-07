@@ -1,7 +1,6 @@
 from pydub import AudioSegment
 from pydub.playback import play
 from pydub.silence import split_on_silence, detect_silence
-import matplotlib.pyplot as plt
 import time
 import collections
 
@@ -39,8 +38,8 @@ def main():
 		# play(sound[chunk[0]: chunk[1]])
 		# print(chunk) 
 		if chunk[0] - last > 3000:
-			play(sound[last: chunk[0]])
-			queue.append([last, chunk[0]])
+			# play(sound[last: chunk[0]])
+			deque.append([last, chunk[0]])
 			cnt+=1
 		# time.sleep(1)
 		# input('c')
@@ -81,7 +80,7 @@ def AppendOrCompress(queue, item, threshold):
 		queue.append(item)
 
 	last = queue[-1]
-	if item[0] - last[1] == 
+	# if item[0] - last[1] == 
 
 
 def CountByRms(stat, k, v): 
