@@ -5,9 +5,9 @@ import time
 import collections
 
 kSTEP = 50
-kSONG_MIN_LENGTH = 3000		# min length of song
+kSONG_MIN_LENGTH = 7000		# min length of song
 kSONG_INTERVAL = 400		# length of spliting chunks
-kSONG_THRESHOLD = 1000		# max distance for concat
+kSONG_THRESHOLD = 700		# max distance for concat
 
 def main():
 	HandleSound("wo_yao_chuan_yue")
