@@ -27,7 +27,7 @@ def main():
 	print("detect_silence done in {}".format(time.time() - start_time))
 
 	last = 0
-
+	cnt = 0
 	print(len(chunks))
 	print("iterate chunks...")
 	start_time = time.time()
@@ -36,14 +36,16 @@ def main():
 		# play(sound[chunk[0]: chunk[1]])
 		# print(chunk) 
 		if chunk[0] - last > kSONG_INTERVAL:
-			# play(sound[last: chunk[0]])
+			play(sound[last: chunk[0]])
 			# deque.append([last, chunk[0]])
+			cnt+=1
 			AppendOrCompressSong(song_time_blocks, [last, chunk[0]], kSONG_THRESHOLD)
 		# time.sleep(1)
 		# input('c')
 		last = chunk[1]
+	print(song_time_blocks)
 	print("iteration done in {}".format(time.time() - start_time))
-	print("Found {} song_blocks".format(len(song_time_blocks)))
+	print("Found {} song_blocks with cnt={}".format(len(song_time_blocks),cnt))
 
 	print("GetSoundWithoutSong...")
 	start_time = time.time()
@@ -85,7 +87,7 @@ def GetSoundWithoutSong(sound, song_time_blocks):
 	res = sound[0:1]
 	last = 0
 	for block in song_time_blocks:
-		print("skip time {} to {}".format(last, block[0]))
+		print("Add time {} to {}".format(last, block[0]))
 		res += sound[last:block[0]]
 		last = block[1]
 	res += sound[last:]
