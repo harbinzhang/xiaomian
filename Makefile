@@ -1,0 +1,1 @@
+ffmpeg -loop 1 -r 1 -i view.jpg  -i wo_yao_chuan_yue.mp3 -c:a copy -shortest -c:v libx264 output.mp4
