@@ -5,9 +5,9 @@ import time
 import collections
 
 kSTEP = 50
-kSONG_MIN_LENGTH = 3000
-kSONG_INTERVAL = 1500
-kSONG_THRESHOLD = 1000
+kSONG_MIN_LENGTH = 3000		# min length of song
+kSONG_INTERVAL = 400		# length of spliting chunks
+kSONG_THRESHOLD = 1000		# max distance for concat
 
 def main():
 	HandleSound("wo_yao_chuan_yue")
@@ -41,7 +41,7 @@ def HandleSound(name):
 			# play(sound[last: chunk[0]])
 			# deque.append([last, chunk[0]])
 			cnt+=1
-			AppendOrCompressSong(song_time_blocks, [last, chunk[0]], kSONG_THRESHOLD)
+			AppendOrCompressSong(song_time_blocks, [last, chunk[0]])
 		# time.sleep(1)
 		# input('c')
 		last = chunk[1]
@@ -56,7 +56,8 @@ def HandleSound(name):
 
 	print("Exporting to SoundWithoutSong")
 	start_time = time.time()
-	soundWithoutSong.export("sound_without_song/new/{}".format(filename), format="mp3")
+	output_name = name + "_out.mp3"
+	soundWithoutSong.export("sound_without_song/new/{}".format(output_name), format="mp3")
 	print("Export to SoundWithoutSong done in {}".format(time.time() - start_time))
 
 	print("Exporting to song")
@@ -84,12 +85,12 @@ def GetSoundWithoutSong(sound, song_time_blocks):
 
 # compress audio block if it closes to the previous one in queue,
 # otherwise simpily append it.
-def AppendOrCompressSong(deque, item, threshold):
+def AppendOrCompressSong(deque, item):
 	if len(deque) == 0:
 		deque.append(item)
 
 	last = deque[-1]
-	if item[0] - last[1] < threshold:
+	if item[0] - last[1] < kSONG_THRESHOLD:
 		deque[-1][1] = item[1]
 	else:
 		if deque[-1][1] - deque[-1][0] < kSONG_MIN_LENGTH:
