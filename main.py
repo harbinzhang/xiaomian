@@ -4,14 +4,13 @@ from pydub.silence import split_on_silence, detect_silence
 import time
 import collections
 
-# sound = AudioSegment.from_mp3("wo.mp3")
 kSTEP = 50
 kSONG_MIN_LENGTH = 3000
 kSONG_INTERVAL = 1500
 kSONG_THRESHOLD = 1000
 
 def main():
-	HandleSound("w1")
+	HandleSound("wo_yao_chuan_yue")
 
 def HandleSound(name):
 	filename = name + ".mp3"
@@ -46,21 +45,25 @@ def HandleSound(name):
 		# time.sleep(1)
 		# input('c')
 		last = chunk[1]
-	print(song_time_blocks)
+	# print(song_time_blocks)
 	print("iteration done in {}".format(time.time() - start_time))
 	print("Found {} song_blocks with cnt={}".format(len(song_time_blocks),cnt))
 
 	print("GetSoundWithoutSong...")
 	start_time = time.time()
-	soundWithoutSong = GetSoundWithoutSong(sound, song_time_blocks)
+	soundWithoutSong, song = GetSoundWithoutSong(sound, song_time_blocks)
 	print("GetSoundWithoutSong done in {}".format(time.time() - start_time))
-
-	# play(soundWithoutSong)
 
 	print("Exporting to SoundWithoutSong")
 	start_time = time.time()
 	soundWithoutSong.export("sound_without_song/new/{}".format(filename), format="mp3")
 	print("Export to SoundWithoutSong done in {}".format(time.time() - start_time))
+
+	print("Exporting to song")
+	start_time = time.time()
+	song_name = name + "_song.mp3"
+	song.export("sound_without_song/new/{}".format(song_name), format="mp3")
+	print("Export to song done in {}".format(time.time() - start_time))
 
 
 def GetSoundWithoutSong(sound, song_time_blocks):
@@ -68,14 +71,16 @@ def GetSoundWithoutSong(sound, song_time_blocks):
 		song_time_blocks.pop()
 
 	res = sound[0]
+	song = sound[0]
 	last = 0
 	for block in song_time_blocks:
-		print("Add time {} to {}".format(last, block[0]))
+		print("Add time {} to {} to output sound".format(last, block[0]))
 		res += sound[last:block[0]]
+		song += sound[block[0]:block[1]]
 		last = block[1]
-		play(sound[block[0]:block[1]])
+		# play(sound[block[0]:block[1]])
 	res += sound[last:]
-	return res
+	return res, song
 
 # compress audio block if it closes to the previous one in queue,
 # otherwise simpily append it.
@@ -99,21 +104,4 @@ def CountByRms(stat, k, v):
 
 if __name__ == "__main__":
     main()
-
-
-
-# start = sounds[0]
-
-# for i in range(0, 100):
-# 	print("{}: {}".format(i, sounds[i].rms))
-	# start += sounds[i]
-	# play(sounds[i])
-
-# normalized = start.normalize(1)
-# i = 0
-# for step in normalized[::kSTEP]:
-# 	print("{}: {}".format(i, step.rms))
-# 	i += 1
-
-# play(normalized)
 
