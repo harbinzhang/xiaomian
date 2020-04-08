@@ -11,14 +11,9 @@ kSONG_INTERVAL = 1500
 kSONG_THRESHOLD = 1000
 
 def main():
-	HandleSound("w1")
-
-def HandleSound(name):
-	filename = name + ".mp3"
-
 	print("loading sound...")
 	start_time = time.time()
-	sound = AudioSegment.from_mp3("mp3_source/new/{}".format(filename))
+	sound = AudioSegment.from_mp3("w.mp3")
 	# sound = AudioSegment.from_mp3("wo_yao_chuan_yue.mp3")
 	print("sound loaded in {}".format(time.time() - start_time))
 
@@ -59,15 +54,35 @@ def HandleSound(name):
 
 	print("Exporting to SoundWithoutSong")
 	start_time = time.time()
-	soundWithoutSong.export("sound_without_song/new/{}".format(filename), format="mp3")
+	soundWithoutSong.export("out.mp3", format="mp3")
 	print("Export to SoundWithoutSong done in {}".format(time.time() - start_time))
 
+	# i = 0
+
+	# sounds = []
+	# stat_cnt = {}
+	# stat_time = {}
+
+	# loudness = []
+
+	# for step in sound[::kSTEP]:
+	# 	sounds.append(step)
+	# 	loudness.append(step.rms)
+	# 	count(stat_cnt, step.rms / 1000, 1)
+	# 	# if (step.rms / 1000 >= 25): 
+	# 	# 	# play(step)
+	# 	# 	print(i/10)
+	# 	i+=1
+
+	# for k in stat_cnt:
+	# 	print("{}: {}".format(k, stat_cnt[k]))
+
+	# plt.plot(loudness)
+	# # plt.plot([1, 2, 3, 4])
+	# plt.show()
 
 def GetSoundWithoutSong(sound, song_time_blocks):
-	if song_time_blocks[-1][1] - song_time_blocks[-1][0] < kSONG_MIN_LENGTH:
-		song_time_blocks.pop()
-
-	res = sound[0]
+	res = sound[0:1]
 	last = 0
 	for block in song_time_blocks:
 		print("Add time {} to {}".format(last, block[0]))
