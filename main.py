@@ -6,13 +6,11 @@ import collections
 
 # sound = AudioSegment.from_mp3("wo.mp3")
 kSTEP = 50
-kSONG_INTERVAL = 3000
+kSONG_MIN_LENGTH = 3000
+kSONG_INTERVAL = 1500
 kSONG_THRESHOLD = 1000
 
 def main():
-
-	
-
 	print("loading sound...")
 	start_time = time.time()
 	sound = AudioSegment.from_mp3("w.mp3")
@@ -36,7 +34,7 @@ def main():
 		# play(sound[chunk[0]: chunk[1]])
 		# print(chunk) 
 		if chunk[0] - last > kSONG_INTERVAL:
-			play(sound[last: chunk[0]])
+			# play(sound[last: chunk[0]])
 			# deque.append([last, chunk[0]])
 			cnt+=1
 			AppendOrCompressSong(song_time_blocks, [last, chunk[0]], kSONG_THRESHOLD)
@@ -90,6 +88,7 @@ def GetSoundWithoutSong(sound, song_time_blocks):
 		print("Add time {} to {}".format(last, block[0]))
 		res += sound[last:block[0]]
 		last = block[1]
+		play(sound[block[0]:block[1]])
 	res += sound[last:]
 	return res
 
@@ -103,6 +102,8 @@ def AppendOrCompressSong(deque, item, threshold):
 	if item[0] - last[1] < threshold:
 		deque[-1][1] = item[1]
 	else:
+		if deque[-1][1] - deque[-1][0] < kSONG_MIN_LENGTH:
+			deque.pop()
 		deque.append(item)
 
 
