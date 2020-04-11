@@ -3,14 +3,58 @@ from pydub.playback import play
 from pydub.silence import split_on_silence, detect_silence
 import time
 import collections
+import os
+
+# from .mp3_source.mp3_file_handler import MP3_File_Handler
+# from .views.Pptx import Pptx
+
+from mp3_source.mp3_file_handler import MP3_File_Handler
+from views.Pptx import Pptx
 
 kSTEP = 50
 kSONG_MIN_LENGTH = 7000		# min length of song
-kSONG_INTERVAL = 400		# length of spliting chunks
+kSONG_INTERVAL = 1000		# length of spliting chunks
 kSONG_THRESHOLD = 700		# max distance for concat
 
 def main():
-	HandleSound("wo_yao_chuan_yue")
+	# HandleSound("wo_yao_chuan_yue")
+	# HandleSound("3")
+	for i in range(8, 20):
+		HandleSound(str(i))
+
+	# GenerateVideo()
+
+def GenerateVideo():
+	mp3_basepath = "dynamic_compressor/new"
+	view_basepath = "views/slides"
+	mp4_basepath = "output/new"
+
+	file_Ids = []
+	for filename in os.listdir(mp3_basepath):
+		if "_out.mp3" in filename:
+			file_Ids.append(filename[:filename.find("_out.mp3")])
+		# res.append(filename.decode('utf-8'))
+
+	for file_Id in file_Ids:
+		view_path = view_basepath + '/' + file_Id + '.png'
+		mp3_path = mp3_basepath + '/' + file_Id + '_out.mp3'
+		mp4_path = mp4_basepath + '/' + file_Id + '.mp4'
+		convertToVideo(view_path, mp3_path, mp4_path)
+
+
+
+
+def convertToVideo(view_path, mp3_path, mp4_path):
+	shell = "ffmpeg -loop 1 -r 1 -i {}  -i {} -c:a copy -shortest -c:v libx264 {}".format(view_path, mp3_path, mp4_path)
+	os.system(shell)	
+
+def PrepareViews():
+	pptx_writer = Pptx("./views/model.pptx")
+	mp3_file_handler = MP3_File_Handler()
+	mp3_file_handler.PopulateDictTextAndPptx(pptx_writer, 
+		"./mp3_source/dedup", "test.txt")
+
+	pptx_writer.Save("one.pptx")
 
 def HandleSound(name):
 	filename = name + ".mp3"

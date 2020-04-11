@@ -1,22 +1,12 @@
-from collections import deque 
-  
-# Initializing a queue 
-q = deque() 
-  
-# Adding elements to a queue 
-q.append('a') 
-q.append('b') 
-q.append('c') 
-  
-print(q[-1])
-# print("Initial queue") 
-# print(q) 
-  
-# # Removing elements from a queue 
-# print("\nElements dequeued from the queue") 
-# print(q.popleft()) 
-# print(q.pop()) 
-# print(q.popleft()) 
-  
-print("\nQueue after removing elements") 
-print(q) 
+import os
+
+
+def main():
+	convertToVideo("view_2.png", "w.mp3", "w_out.mp4")
+
+def convertToVideo(view_path, mp3_path, mp4_path):
+	shell = "ffmpeg -loop 1 -r 1 -i {}  -i {} -c:a copy -shortest -c:v libx264 {}".format(view_path, mp3_path, mp4_path)
+	os.system(shell)
+
+if __name__ == "__main__":
+    main()
