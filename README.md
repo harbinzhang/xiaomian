@@ -3,6 +3,9 @@
 ## Overview
 This project is a Python-based audio processing and video generation tool that extracts songs from audio files, processes PowerPoint presentations, and creates videos by combining audio with slide images.
 
+## YouTube Channel
+Visit our YouTube channel: [笑眠](https://www.youtube.com/@%E7%AC%91%E7%9C%A0-r2z)
+
 ## Features
 - **Audio Song Detection**: Automatically detects and removes background music/songs from audio files using silence detection algorithms
 - **Dynamic Audio Processing**: Processes multiple audio files in batch with configurable parameters
