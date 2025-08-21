@@ -2,3 +2,20 @@ mp3_source/
 sound_without_song/
 dynamic_compressor/
 output/
+
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Photoshop
+*.psd
+
+# Audio/Video files (optional - uncomment if needed)
+# *.mp3
+# *.mp4
+
+# Test outputs
+test/*.mp3
+test/*.mp4
